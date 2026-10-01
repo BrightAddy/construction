@@ -1,0 +1,689 @@
+/* =========================================================================
+   Technologie & Innovation (Bauen 4.0) Styles
+   Palette: High-Tech Deep Navy (#08142C / #0B1B3D), Electric Blue (#0052CC / #38BDF8),
+   Safety Orange (#FF8024), Pure White (#FFFFFF), Subtle Slate (#64748B)
+   ========================================================================= */
+
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #F8FAFC;
+  color: #0F172A;
+  overflow-x: hidden;
+}
+
+/* =========================================
+   1. HERO SECTION
+   ========================================= */
+.heroWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 160px 2rem 5rem;
+  background: #08142C;
+  overflow: hidden;
+}
+
+.heroBgImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  z-index: 0;
+  opacity: 0.35;
+  filter: contrast(1.2) brightness(0.85);
+}
+
+.heroOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      circle at 50% 30%,
+      rgba(0, 82, 204, 0.25) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(8, 20, 44, 0.85) 0%,
+      rgba(8, 20, 44, 0.7) 50%,
+      rgba(8, 20, 44, 0.98) 100%
+    );
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 940px;
+  margin: 0 auto;
+}
+
+.heroTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38BDF8;
+  padding: 0.4rem 1.15rem;
+  border-radius: 9999px;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2.6rem, 5.2vw, 4.4rem);
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1.08;
+  margin-bottom: 1.25rem;
+  text-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+}
+
+.heroSubtitle {
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  font-weight: 400;
+  color: #E2E8F0;
+  line-height: 1.65;
+  max-width: 780px;
+  margin: 0 auto 2.5rem;
+}
+
+.heroStatsStrip {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.heroStatItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 150px;
+}
+
+.heroStatVal {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #38BDF8;
+  line-height: 1.1;
+}
+
+.heroStatLabel {
+  font-size: 0.8rem;
+  color: #94A3B8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
+}
+
+/* =========================================
+   2. PILLARS OF INNOVATION (Bauen 4.0)
+   ========================================= */
+.pillarsSection {
+  max-width: 1400px;
+  margin: -3.5rem auto 5rem;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.pillarsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .pillarsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .pillarsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pillarCard {
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 2rem 1.75rem;
+  box-shadow: 0 10px 30px rgba(8, 20, 44, 0.06);
+  border: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pillarCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #0052CC, #38BDF8);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pillarCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(8, 20, 44, 0.12);
+  border-color: #CBD5E1;
+}
+
+.pillarCard:hover::before {
+  opacity: 1;
+}
+
+.pillarIconBox {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: #EFF6FF;
+  color: #0052CC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.pillarTag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0052CC;
+  margin-bottom: 0.35rem;
+}
+
+.pillarTitle {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0B1B3D;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.pillarDesc {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  flex: 1;
+}
+
+.pillarKeyVal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #F1F5F9;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+/* =========================================
+   3. INTERACTIVE TECHNOLOGY DEEP-DIVE
+   ========================================= */
+.deepDiveSection {
+  background: #FFFFFF;
+  padding: 6rem 2rem;
+  border-top: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.deepDiveContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 4rem;
+}
+
+.sectionTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #EFF6FF;
+  color: #0052CC;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  margin-bottom: 0.75rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  font-weight: 900;
+  color: #0B1B3D;
+  letter-spacing: -0.01em;
+  margin-bottom: 1rem;
+}
+
+.sectionSubtitle {
+  font-size: 1.05rem;
+  color: #64748B;
+  line-height: 1.6;
+}
+
+/* Deep Dive Tab Bar */
+.deepDiveTabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.deepDiveTabBtn {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #475569;
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 0.75rem 1.4rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.deepDiveTabBtn:hover {
+  background: #E2E8F0;
+  color: #0B1B3D;
+}
+
+.deepDiveTabBtnActive {
+  background: #0052CC !important;
+  color: #FFFFFF !important;
+  border-color: #0052CC !important;
+  box-shadow: 0 4px 15px rgba(0, 82, 204, 0.35);
+}
+
+/* Deep Dive Showcase Panel */
+.showcasePanel {
+  background: #08142C;
+  color: #FFFFFF;
+  border-radius: 28px;
+  padding: 3.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 3.5rem;
+  align-items: center;
+  box-shadow: 0 25px 60px -15px rgba(8, 20, 44, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 992px) {
+  .showcasePanel {
+    grid-template-columns: 1fr;
+    padding: 2rem;
+    gap: 2.5rem;
+  }
+}
+
+.showcaseVisualCol {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.showcaseImg {
+  object-fit: cover;
+}
+
+.showcaseFloatBadge {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  background: rgba(8, 20, 44, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 0.65rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38BDF8;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.showcaseInfoCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.showcaseCategory {
+  color: #38BDF8;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+
+.showcaseHeading {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #FFFFFF;
+  margin-bottom: 1.25rem;
+  line-height: 1.15;
+}
+
+.showcaseText {
+  color: #CBD5E1;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1.75rem;
+}
+
+.showcaseFeaturesList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 600px) {
+  .showcaseFeaturesList {
+    grid-template-columns: 1fr;
+  }
+}
+
+.showcaseFeatureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: #E2E8F0;
+  line-height: 1.45;
+}
+
+.showcaseFeatureItem svg {
+  color: #38BDF8;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+/* =========================================
+   4. PROCESS COMPARISON (Klassisch vs. BIM 5D)
+   ========================================= */
+.comparisonSection {
+  max-width: 1400px;
+  margin: 6rem auto;
+  padding: 0 2rem;
+}
+
+.comparisonTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #FFFFFF;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(8, 20, 44, 0.05);
+  border: 1px solid #E2E8F0;
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  padding: 1.25rem 1.75rem;
+  text-align: left;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.comparisonTable th {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #F8FAFC;
+  color: #0F172A;
+}
+
+.comparisonTable th:last-child {
+  background: #0052CC;
+  color: #FFFFFF;
+}
+
+.comparisonTable tr:last-child td {
+  border-bottom: none;
+}
+
+.comparisonCriterion {
+  font-weight: 700;
+  color: #0F172A;
+  font-size: 0.95rem;
+}
+
+.comparisonOld {
+  color: #64748B;
+  font-size: 0.92rem;
+}
+
+.comparisonNew {
+  color: #0052CC;
+  font-weight: 700;
+  font-size: 0.95rem;
+  background: rgba(0, 82, 204, 0.04);
+}
+
+/* =========================================
+   5. CERTIFICATIONS & COMPLIANCE
+   ========================================= */
+.certsSection {
+  background: #F1F5F9;
+  padding: 6rem 2rem;
+  border-top: 1px solid #E2E8F0;
+}
+
+.certsContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.certsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .certsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .certsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.certCard {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 2rem 1.5rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.certCard:hover {
+  transform: translateY(-4px);
+  border-color: #0052CC;
+}
+
+.certIcon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #EFF6FF;
+  color: #0052CC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.certStandard {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0B1B3D;
+  margin-bottom: 0.35rem;
+}
+
+.certSubject {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #FF8024;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.certDetails {
+  font-size: 0.88rem;
+  color: #64748B;
+  line-height: 1.55;
+}
+
+/* =========================================
+   6. CTA SECTION
+   ========================================= */
+.ctaSection {
+  background: linear-gradient(135deg, #08142C 0%, #0052CC 100%);
+  color: #FFFFFF;
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.ctaInner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.ctaTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  font-weight: 900;
+  color: #FFFFFF;
+  margin-bottom: 1.25rem;
+  line-height: 1.15;
+}
+
+.ctaDesc {
+  color: #E2E8F0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2.2rem;
+}
+
+.ctaBtnGroup {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.primaryCta {
+  background: #FF8024;
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 0.9rem 2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(255, 128, 36, 0.4);
+}
+
+.primaryCta:hover {
+  background: #EA580C;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 128, 36, 0.5);
+}
+
+.secondaryCta {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.9rem 1.8rem;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.secondaryCta:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}

@@ -1,0 +1,111 @@
+/* =========================================================================
+   Impressum & Rechtliche Hinweise Styles
+   ========================================================================= */
+
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #F8FAFC;
+  color: #0F172A;
+  overflow-x: hidden;
+}
+
+.heroWrapper {
+  position: relative;
+  width: 100%;
+  padding: 160px 2rem 4rem;
+  background: #0B1B3D;
+  text-align: center;
+}
+
+.heroTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 128, 36, 0.15);
+  border: 1px solid rgba(255, 128, 36, 0.4);
+  color: #FF8024;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  font-weight: 900;
+  color: #FFFFFF;
+  margin-bottom: 0.75rem;
+}
+
+.heroSubtitle {
+  color: #CBD5E1;
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contentSection {
+  max-width: 960px;
+  margin: -2rem auto 6rem;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.legalCard {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 3.5rem;
+  box-shadow: 0 10px 40px rgba(11, 27, 61, 0.06);
+  border: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+@media (max-width: 600px) {
+  .legalCard {
+    padding: 2rem 1.5rem;
+  }
+}
+
+.legalBlock {
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 2rem;
+}
+
+.legalBlock:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.blockTitle {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0B1B3D;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.blockText {
+  color: #475569;
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.blockText strong {
+  color: #0F172A;
+}
+
+.linkAccent {
+  color: #0052CC;
+  text-decoration: underline;
+}

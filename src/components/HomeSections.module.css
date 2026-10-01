@@ -1,0 +1,584 @@
+/* =========================================================================
+   Home Sections Styling: Clean White & Navy German Engineering Aesthetics
+   ========================================================================= */
+
+.sectionWrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 6.5rem 3rem;
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 740px;
+  margin: 0 auto 4rem;
+}
+
+.badgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #EFF6FF;
+  border: 1px solid rgba(0, 82, 204, 0.25);
+  padding: 0.4rem 1.1rem;
+  border-radius: 9999px;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0052CC;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.25rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  color: #0A1E3F;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.sectionSubtitle {
+  font-size: 1.12rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* =========================================
+   ABOUT US SNAPSHOT
+   ========================================= */
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.aboutContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.aboutLead {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0F172A;
+  line-height: 1.5;
+}
+
+.aboutParagraph {
+  font-size: 1.05rem;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.aboutStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.statCard {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.4rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  border-color: #0052CC;
+}
+
+.statNumber {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #0052CC;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-top: 0.5rem;
+}
+
+.statSub {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin-top: 0.2rem;
+}
+
+.aboutImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 45px rgba(10, 30, 60, 0.15);
+  border: 1px solid #E2E8F0;
+}
+
+/* =========================================
+   SERVICES 3-COLUMN SUMMARY
+   ========================================= */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.serviceCard {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.serviceCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 35px rgba(0, 82, 204, 0.12);
+  border-color: #0052CC;
+}
+
+.serviceImageContainer {
+  position: relative;
+  width: 100%;
+  height: 230px;
+}
+
+.serviceTag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #0052CC;
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.serviceBody {
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.serviceCardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0A1E3F;
+  margin-bottom: 0.75rem;
+}
+
+.serviceDescription {
+  font-size: 0.95rem;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.serviceFeatures {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.serviceFeatureItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.serviceFeatureItem svg {
+  color: #0052CC;
+  flex-shrink: 0;
+}
+
+.serviceLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0052CC;
+  text-decoration: none;
+  transition: gap 0.2s ease;
+}
+
+.serviceLink:hover {
+  gap: 0.7rem;
+}
+
+/* =========================================
+   FEATURED PROJECTS
+   ========================================= */
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+}
+
+.projectCard {
+  position: relative;
+  height: 380px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2.2rem;
+  color: #FFFFFF;
+}
+
+.projectImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+.projectCard:hover .projectImage {
+  transform: scale(1.05);
+}
+
+.projectOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(10, 30, 60, 0.1) 0%, rgba(10, 30, 60, 0.85) 85%);
+  z-index: 1;
+}
+
+.projectInfo {
+  position: relative;
+  z-index: 2;
+}
+
+.projectLocation {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #60A5FA;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+
+.projectTitle {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.projectMeta {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* =========================================
+   TRUST & CERTIFICATIONS
+   ========================================= */
+.trustContainer {
+  background: #F8FAFC;
+  border-radius: 20px;
+  border: 1px solid #E2E8F0;
+  padding: 3rem 2.5rem;
+  text-align: center;
+}
+
+.trustLogosGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.trustLogoCard {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.trustLogoName {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0A1E3F;
+}
+
+.trustLogoSub {
+  font-size: 0.78rem;
+  color: #64748B;
+  font-weight: 600;
+}
+
+/* =========================================
+   CONTACT & QUOTE REQUEST
+   ========================================= */
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 4rem;
+  background: #0A1E3F;
+  border-radius: 24px;
+  padding: 4.5rem;
+  color: #FFFFFF;
+}
+
+.contactInfoGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.contactHeadline {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.contactCard {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+}
+
+.contactIconBox {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #0052CC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+/* Contact Form */
+.formContainer {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 2.5rem;
+  color: #0F172A;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+}
+
+.formGroupFull {
+  grid-column: span 2;
+}
+
+.formLabel {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 0.4rem;
+}
+
+.formInput, .formTextarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #CBD5E1;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #0F172A;
+  background: #F8FAFC;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.formInput:focus, .formTextarea:focus {
+  border-color: #0052CC;
+  background: #FFFFFF;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: #64748B;
+  line-height: 1.45;
+}
+
+.submitBtn {
+  width: 100%;
+  background: #0052CC;
+  color: #FFFFFF;
+  padding: 0.95rem;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 15px rgba(0, 82, 204, 0.4);
+  transition: background 0.2s ease, transform 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.submitBtn:hover {
+  background: #0043A8;
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+.footerContainer {
+  background: #061126;
+  color: #FFFFFF;
+  padding: 5rem 3rem 2.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footerInner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: 3.5rem;
+  padding-bottom: 3.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footerColTitle {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 1.25rem;
+  color: #FFFFFF;
+}
+
+.footerLinksList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footerLink {
+  color: #94A3B8;
+  font-size: 0.92rem;
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover {
+  color: #FFFFFF;
+}
+
+.footerBottom {
+  max-width: 1440px;
+  margin: 2.5rem auto 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #64748B;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.legalLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .sectionWrapper {
+    padding: 5rem 2rem;
+  }
+  .aboutGrid {
+    grid-template-columns: 1fr;
+  }
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+  .trustLogosGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .contactGrid {
+    grid-template-columns: 1fr;
+    padding: 2.5rem;
+  }
+  .footerInner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .sectionWrapper {
+    padding: 4rem 1.25rem;
+  }
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  .formGroupFull {
+    grid-column: span 1;
+  }
+  .footerInner {
+    grid-template-columns: 1fr;
+  }
+}
