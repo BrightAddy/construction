@@ -28,19 +28,29 @@ export default function GlassNavbar() {
       const currentY = window.scrollY;
       const diff = currentY - lastScrollY.current;
 
-      // Mark as scrolled (glass bg) after 40px
-      setIsScrolled(currentY > 40);
+      // When on the home page, remain transparent throughout the entire pinned hero section.
+      // Transition to solid/dark treatment only when crossing the hero boundary into the next section.
+      let threshold = 40;
+      if (isHome) {
+        const hero = document.getElementById("top");
+        if (hero) {
+          const heroScrollable = hero.offsetHeight - window.innerHeight;
+          threshold = Math.max(40, heroScrollable - 30);
+        }
+      }
 
-      // Hide navbar when scrolling DOWN more than 8px past initial threshold
-      // Show navbar when scrolling UP
-      if (currentY > 80) {
+      const passedBoundary = currentY > threshold;
+      setIsScrolled(passedBoundary);
+
+      // Hide/reveal navbar on scroll direction ONLY after leaving the hero section
+      if (passedBoundary) {
         if (diff > 8) {
           setIsHidden(true);
         } else if (diff < -8) {
           setIsHidden(false);
         }
       } else {
-        // Always show when near the top
+        // Always show and keep transparent when inside the pinned hero
         setIsHidden(false);
       }
 
@@ -48,8 +58,10 @@ export default function GlassNavbar() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    // Run once on mount to set initial state correctly
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isHome]);
 
   const scrollToTop = (e: React.MouseEvent) => {
     if (isHome) {

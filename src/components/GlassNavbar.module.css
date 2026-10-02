@@ -16,12 +16,15 @@
   justify-content: space-between;
   gap: 1.5rem;
   transform: translateY(0);
+  background: transparent;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.3s ease,
-              backdrop-filter 0.3s ease,
-              box-shadow 0.3s ease,
-              padding 0.3s ease;
-  will-change: transform;
+              background 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              backdrop-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              -webkit-backdrop-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              padding 0.35s ease;
+  will-change: transform, background;
 }
 
 /* Slide navbar out of view upwards */
@@ -30,11 +33,11 @@
 }
 
 .headerContainerScrolled {
-  background: rgba(10, 20, 40, 0.82);
+  background: rgba(4, 12, 28, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   padding: 0.85rem 2rem;
 }
 
