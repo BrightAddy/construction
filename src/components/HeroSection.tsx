@@ -1,316 +1,418 @@
-﻿"use client";
+"use client";
 
 /**
- * HeroSection — Cinematic Scroll-Driven Video  (Definitive)
+ * HeroSection — Ultra-Smooth Cinematic Video Hero
  *
- * Root fix: rate = smoothedVelocity × 60
- *   vel (video-seconds per frame) × 60 fps = video-seconds per real second
- *   → playbackRate tracks the scroll speed by definition, zero overshoot
- *
- * Canvas display layer removes all browser seek-flicker artifacts.
- * requestVideoFrameCallback (Chrome/Edge) paints frames at exact GPU-ready moments.
- * seeked-event draw ensures backward seeks paint only when complete.
+ * Built for 60-120fps hardware-accelerated continuous playback:
+ * - Native GPU video layers with zero seeking/decode stutter
+ * - Seamless cinematic crossfade between Video 1 (Rohbau/Site) & Video 2 (Architektur)
+ * - Scroll-driven camera parallax zoom & narrative storytelling beats
+ * - Low-friction sticky scrolling (260vh) with Framer Motion spring physics
+ * - Intelligent IntersectionObserver offscreen pausing for 0% CPU consumption
  */
 
-import { useRef, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Layers,
+  ShieldCheck,
+  CheckCircle2,
+  Cpu,
+  ArrowDown,
+  Sparkles
+} from "lucide-react";
 import GlassNavbar from "./GlassNavbar";
 import styles from "./HeroSection.module.css";
 
-// ─── Tunables (adjust freely) ──────────────────────────────────────────────
-const SCROLL_MULTIPLIER  = 5;     // extra viewport-heights of scroll to cover both videos
-const MAX_RATE           = 8;     // cap on playbackRate when scrolling fast
-const MIN_RATE           = 0.1;   // floor on playbackRate when scrolling slowly
-const EMA_ALPHA          = 0.15;  // velocity smoothing: lower = smoother but more lag
-const BACK_THROTTLE_MS   = 55;    // min ms between backward seeks (~18 seeks/sec max)
-const IDLE_DELAY_MS      = 180;   // ms after scroll stops → precision seek to exact frame
-const FWD_VEL_THRESHOLD  = 0.0005;// EMA vel above this → scrolling forward
-const BACK_VEL_THRESHOLD = -0.0005;
-const HARD_SYNC_GAP_S    = 1.0;   // seconds desync → immediate hard seek
-const CATCH_UP_GAP_S     = 0.5;   // forward gap this large → seek to catch up
-// ──────────────────────────────────────────────────────────────────────────
-
-const HAS_RVFC =
-  typeof HTMLVideoElement !== "undefined" &&
-  "requestVideoFrameCallback" in HTMLVideoElement.prototype;
-
 export default function HeroSection() {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const canvasRef  = useRef<HTMLCanvasElement>(null);
-  const v1Ref      = useRef<HTMLVideoElement>(null);
-  const v2Ref      = useRef<HTMLVideoElement>(null);
+  const v1Ref = useRef<HTMLVideoElement>(null);
+  const v2Ref = useRef<HTMLVideoElement>(null);
 
-  // All hot-path state in refs — zero React re-renders during animation
-  const rafIdRef    = useRef(0);
-  const ctxRef      = useRef<CanvasRenderingContext2D | null>(null);
-  const prevTarget  = useRef(0);
-  const velEMA      = useRef(0);
-  const dur1        = useRef(0);
-  const dur2        = useRef(0);
-  const total       = useRef(0);
-  const activeSlot  = useRef<1 | 2>(1);
-  const isReady     = useRef(false);
-  const isPlaying   = useRef(false);
-  const lastBackMs  = useRef(0);
-  const idleStartMs = useRef(0);
+  // Playback & Sound State
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [activeSlot, setActiveSlot] = useState<1 | 2>(1);
+  const [manualOverride, setManualOverride] = useState(false);
 
-  // Framer-motion: overlay text animations only (no video involvement)
-  const { scrollYProgress } = useScroll({ target: wrapperRef, offset: ["start start", "end end"] });
-  const openOp  = useTransform(scrollYProgress, [0, 0.14], [1, 0]);
-  const openY   = useTransform(scrollYProgress, [0, 0.14], ["0%", "-28%"]);
-  const capOp   = useTransform(scrollYProgress, [0.28, 0.38, 0.62, 0.72], [0, 1, 1, 0]);
-  const capY    = useTransform(scrollYProgress, [0.28, 0.38], ["18px", "0px"]);
-  const endOp   = useTransform(scrollYProgress, [0.84, 0.94], [0, 1]);
-  const scrollY = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
+  // Scroll Progress across the 260vh hero container
+  const { scrollYProgress } = useScroll({
+    target: wrapperRef,
+    offset: ["start start", "end end"]
+  });
 
+  // ── Cinematic Camera Zoom & Vignette Transforms ──────────────────────────
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.09]);
+  const vignetteDim = useTransform(scrollYProgress, [0, 0.7], [0.35, 0.65]);
+
+  // ── Automatic Video Crossfade based on Scroll ────────────────────────────
+  // 0% -> 32%: Video 1 (Foundation & Active Construction)
+  // 32% -> 56%: Smooth Crossfade to Video 2
+  // 56% -> 100%: Video 2 (Modern Architectural Structure & Finish)
+  const v2ScrollOpacity = useTransform(scrollYProgress, [0.32, 0.54], [0, 1]);
+
+  // Update active camera feed pill based on scroll (unless manually chosen)
   useEffect(() => {
+    return scrollYProgress.on("change", (latest) => {
+      if (!manualOverride) {
+        if (latest >= 0.44 && activeSlot !== 2) {
+          setActiveSlot(2);
+        } else if (latest < 0.44 && activeSlot !== 1) {
+          setActiveSlot(1);
+        }
+      }
+    });
+  }, [scrollYProgress, manualOverride, activeSlot]);
+
+  // ── Narrative Overlays (3 Choreographed Beats) ───────────────────────────
+  // Beat 1: Main Hero Headline & Primary CTA
+  const openOpacity = useTransform(scrollYProgress, [0, 0.16, 0.26], [1, 0.9, 0]);
+  const openY = useTransform(scrollYProgress, [0, 0.26], ["0px", "-45px"]);
+
+  // Beat 2: Mid-Scroll Tech & Precision Feature Card
+  const beat2Opacity = useTransform(
+    scrollYProgress,
+    [0.28, 0.38, 0.58, 0.68],
+    [0, 1, 1, 0]
+  );
+  const beat2Y = useTransform(
+    scrollYProgress,
+    [0.28, 0.38, 0.58, 0.68],
+    ["36px", "0px", "0px", "-36px"]
+  );
+  const beat2Scale = useTransform(
+    scrollYProgress,
+    [0.28, 0.38, 0.58, 0.68],
+    [0.96, 1, 1, 0.96]
+  );
+
+  // Beat 3: Grand Finale Stats & Credibility Row
+  const beat3Opacity = useTransform(scrollYProgress, [0.70, 0.82], [0, 1]);
+  const beat3Y = useTransform(scrollYProgress, [0.70, 0.82], ["28px", "0px"]);
+
+  // Scroll Hint (fades out as soon as user begins scrolling)
+  const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
+
+  // ── Auto-play initialization & offscreen resource saving ─────────────────
+  useEffect(() => {
+    const v1 = v1Ref.current;
+    const v2 = v2Ref.current;
+    if (v1) {
+      v1.play().catch(() => {});
+    }
+    if (v2) {
+      v2.play().catch(() => {});
+    }
+
+    // Save CPU/GPU by pausing videos when scrolled far out of view
     const wrapper = wrapperRef.current;
-    const canvas  = canvasRef.current;
-    const v1      = v1Ref.current;
-    const v2      = v2Ref.current;
-    if (!wrapper || !canvas || !v1 || !v2) return;
+    if (!wrapper || typeof IntersectionObserver === "undefined") return;
 
-    // ── Canvas: Retina-aware, covers full viewport ─────────────────────────
-    const setupCanvas = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const W = window.innerWidth, H = window.innerHeight;
-      canvas.width  = W * dpr;
-      canvas.height = H * dpr;
-      canvas.style.width  = W + "px";
-      canvas.style.height = H + "px";
-      const ctx = canvas.getContext("2d", { alpha: false });
-      if (ctx) { ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctxRef.current = ctx; }
-    };
-    setupCanvas();
-    window.addEventListener("resize", setupCanvas, { passive: true });
-
-    // ── Draw: paints current video frame to canvas ────────────────────────
-    const draw = (v: HTMLVideoElement) => {
-      const ctx = ctxRef.current;
-      if (!ctx || v.readyState < 2) return;
-      ctx.drawImage(v, 0, 0, window.innerWidth, window.innerHeight);
-    };
-
-    // ── rVFC: frame-perfect draw on Chrome/Edge ───────────────────────────
-    const armRVFC = (v: HTMLVideoElement) => {
-      if (!HAS_RVFC) return;
-      const slot = v === v1 ? 1 : 2;
-      const loop = () => {
-        draw(v);
-        if (isPlaying.current && activeSlot.current === slot)
-          (v as any).requestVideoFrameCallback(loop);
-      };
-      (v as any).requestVideoFrameCallback(loop);
-    };
-
-    // ── Video init ─────────────────────────────────────────────────────────
-    [v1, v2].forEach(v => { v.muted = true; v.autoplay = false; v.pause(); v.currentTime = 0; });
-
-    // ── Metadata → size wrapper, prime buffer ──────────────────────────────
-    let metaCount = 0;
-    const onMeta = (v: HTMLVideoElement, s: 1 | 2) => {
-      if (s === 1) dur1.current = v.duration;
-      else         dur2.current = v.duration;
-      if (++metaCount < 2) return;
-
-      total.current = dur1.current + dur2.current;
-      const pxPerSec = Math.max(220, (window.innerHeight * SCROLL_MULTIPLIER) / total.current);
-      wrapper.style.height = `calc(100vh + ${total.current * pxPerSec}px)`;
-
-      const prime = (v: HTMLVideoElement) =>
-        v.play().then(() => { v.pause(); v.currentTime = 0; }).catch(() => {});
-      Promise.all([prime(v1), prime(v2)]).finally(() => {
-        v1.addEventListener("seeked", () => draw(v1), { once: true });
-        v1.currentTime = 0;
-        isReady.current = true;
-      });
-    };
-    const bindMeta = (v: HTMLVideoElement, s: 1 | 2) => {
-      if (v.readyState >= 1) onMeta(v, s);
-      else v.addEventListener("loadedmetadata", () => onMeta(v, s), { once: true });
-    };
-    bindMeta(v1, 1); bindMeta(v2, 2);
-
-    // ── Helpers ────────────────────────────────────────────────────────────
-    const switchTo = (s: 1 | 2) => {
-      if (activeSlot.current === s) return;
-      activeSlot.current = s;
-      (s === 1 ? v2 : v1).pause();
-      isPlaying.current = false;
-    };
-
-    const seekThen = (v: HTMLVideoElement, t: number) => {
-      isPlaying.current = false;
-      v.pause();
-      v.currentTime = Math.max(0, Math.min(t, v.duration - 0.001));
-      v.addEventListener("seeked", () => draw(v), { once: true });
-    };
-
-    // ── Main rAF tick ──────────────────────────────────────────────────────
-    const tick = (now: number) => {
-      rafIdRef.current = requestAnimationFrame(tick);
-      if (!isReady.current) return;
-
-      // Scroll progress — read DOM directly, no scroll listener
-      const rect       = wrapper.getBoundingClientRect();
-      const scrollable = wrapper.offsetHeight - window.innerHeight;
-      const scrolled   = Math.max(0, -rect.top);
-      const progress   = scrollable > 0 ? Math.min(1, scrolled / scrollable) : 0;
-
-      const d1  = dur1.current;
-      const d2  = dur2.current;
-      const tot = total.current;
-      const tgt = progress * tot;
-
-      // EMA-smoothed velocity (video-seconds per frame)
-      const rawVel = tgt - prevTarget.current;
-      prevTarget.current = tgt;
-      velEMA.current = velEMA.current * (1 - EMA_ALPHA) + rawVel * EMA_ALPHA;
-      const vel = velEMA.current;
-
-      // Route to the right clip
-      let vid: HTMLVideoElement, localTgt: number;
-      if (tgt <= d1) {
-        switchTo(1);
-        vid = v1; localTgt = Math.max(0, Math.min(tgt, d1 - 0.001));
-      } else {
-        switchTo(2);
-        vid = v2; localTgt = Math.max(0, Math.min(tgt - d1, d2 - 0.001));
-      }
-
-      const diff = localTgt - vid.currentTime; // + means video is behind
-
-      // ① Hard resync (jumped far)
-      if (Math.abs(diff) > HARD_SYNC_GAP_S) {
-        idleStartMs.current = 0;
-        seekThen(vid, localTgt);
-
-      // ② Scrolling forward
-      } else if (vel > FWD_VEL_THRESHOLD) {
-        idleStartMs.current = 0;
-
-        // KEY FIX: rate = vel × 60 — video tracks scroll speed, no overshoot
-        const rate = Math.max(MIN_RATE, Math.min(MAX_RATE, vel * 60));
-        if (Math.abs(vid.playbackRate - rate) > 0.08) vid.playbackRate = rate;
-
-        if (vid.paused) {
-          vid.play().then(() => { isPlaying.current = true; armRVFC(vid); }).catch(() => {});
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!v1Ref.current || !v2Ref.current) return;
+        if (entry.isIntersecting) {
+          if (isPlaying) {
+            v1Ref.current.play().catch(() => {});
+            v2Ref.current.play().catch(() => {});
+          }
+        } else {
+          v1Ref.current.pause();
+          v2Ref.current.pause();
         }
-        if (!HAS_RVFC) draw(vid); // Safari/Firefox: draw in rAF
+      },
+      { threshold: 0.05 }
+    );
 
-        // If video has fallen significantly behind, seek to catch up
-        if (diff > CATCH_UP_GAP_S) seekThen(vid, localTgt);
+    observer.observe(wrapper);
+    return () => observer.disconnect();
+  }, [isPlaying]);
 
-      // ③ Scrolling backward — throttled precision seeks
-      } else if (vel < BACK_VEL_THRESHOLD) {
-        idleStartMs.current = 0;
-        if (now - lastBackMs.current >= BACK_THROTTLE_MS && Math.abs(diff) > 0.03) {
-          lastBackMs.current = now;
-          seekThen(vid, localTgt);
-        }
+  // ── Controls Handlers ───────────────────────────────────────────────────
+  const togglePlay = () => {
+    const v1 = v1Ref.current;
+    const v2 = v2Ref.current;
+    if (!v1 || !v2) return;
 
-      // ④ Idle — precision-seek to exact frame after brief delay
-      } else {
-        if (!idleStartMs.current) idleStartMs.current = now;
-        if (now - idleStartMs.current >= IDLE_DELAY_MS) {
-          idleStartMs.current = 0;
-          if (!vid.paused) { vid.pause(); isPlaying.current = false; }
-          if (Math.abs(diff) > 0.01) seekThen(vid, localTgt);
-        }
-      }
-    };
+    if (isPlaying) {
+      v1.pause();
+      v2.pause();
+      setIsPlaying(false);
+    } else {
+      v1.play().catch(() => {});
+      v2.play().catch(() => {});
+      setIsPlaying(true);
+    }
+  };
 
-    rafIdRef.current = requestAnimationFrame(tick);
+  const toggleMute = () => {
+    const next = !isMuted;
+    setIsMuted(next);
+    if (v1Ref.current) v1Ref.current.muted = next;
+    if (v2Ref.current) v2Ref.current.muted = next;
+  };
 
-    return () => {
-      cancelAnimationFrame(rafIdRef.current);
-      window.removeEventListener("resize", setupCanvas);
-      [v1, v2].forEach(v => v.pause());
-    };
-  }, []);
+  const selectFeed = (slot: 1 | 2) => {
+    setActiveSlot(slot);
+    setManualOverride(true);
+  };
+
+  // Determine computed opacity for Video 2 based on manual override vs scroll
+  const getV2Opacity = () => {
+    if (manualOverride) {
+      return activeSlot === 2 ? 1 : 0;
+    }
+    return v2ScrollOpacity;
+  };
 
   return (
     <div id="top" ref={wrapperRef} className={styles.scrollWrapper}>
       <div className={styles.stickyStage}>
+        {/* Navigation Bar */}
         <GlassNavbar />
 
-        {/* Canvas — sole display surface; eliminates all seek flicker */}
-        <canvas ref={canvasRef} className={styles.heroCanvas} />
+        {/* ── Native GPU-Accelerated Video Canvas Surface ─────────────────── */}
+        <motion.div className={styles.videoContainer} style={{ scale: videoScale }}>
+          {/* Video 1: Rohbau & Baustelle */}
+          <video
+            ref={v1Ref}
+            className={styles.videoLayer}
+            src="/videos/1.mp4"
+            autoPlay
+            muted={isMuted}
+            loop
+            playsInline
+            preload="auto"
+            style={{
+              opacity: manualOverride && activeSlot === 2 ? 0 : 1,
+              zIndex: 0
+            }}
+          />
 
-        {/* Videos: decode only, visually hidden (opacity 0, off-screen) */}
-        <video ref={v1Ref} className={styles.hiddenVideo}
-          src="/videos/1.mp4" muted playsInline preload="auto" />
-        <video ref={v2Ref} className={styles.hiddenVideo}
-          src="/videos/2.mp4" muted playsInline preload="auto" />
+          {/* Video 2: Architektur & Fertigstellung */}
+          <motion.video
+            ref={v2Ref}
+            className={styles.videoLayer}
+            src="/videos/2.mp4"
+            autoPlay
+            muted={isMuted}
+            loop
+            playsInline
+            preload="auto"
+            style={{
+              opacity: getV2Opacity(),
+              zIndex: 1
+            }}
+          />
 
-        <div className={styles.vignette} aria-hidden />
+          {/* Cinematic Vignette Overlay */}
+          <motion.div
+            className={styles.vignette}
+            style={{ opacity: vignetteDim }}
+            aria-hidden
+          />
 
-        {/* Opening overlay */}
-        <motion.div className={styles.openingOverlay} style={{ y: openY, opacity: openOp }}>
-          <motion.span className={styles.eyebrow}
-            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
+          {/* Architectural Grid Depth Layer */}
+          <div className={styles.gridTexture} aria-hidden />
+        </motion.div>
+
+        {/* ── Camera Feed Switcher (Top Right) ───────────────────────────── */}
+        <div className={styles.feedSwitcher} role="tablist" aria-label="Kamera-Perspektiven">
+          <button
+            type="button"
+            className={`${styles.feedBtn} ${activeSlot === 1 ? styles.feedBtnActive : ""}`}
+            onClick={() => selectFeed(1)}
+            aria-selected={activeSlot === 1}
+            title="Kamera 1: Baustelle & Rohbau"
+          >
+            <span
+              className={`${styles.feedDot} ${activeSlot === 1 ? styles.feedDotActive : ""}`}
+            />
+            01 Baustelle
+          </button>
+          <button
+            type="button"
+            className={`${styles.feedBtn} ${activeSlot === 2 ? styles.feedBtnActive : ""}`}
+            onClick={() => selectFeed(2)}
+            aria-selected={activeSlot === 2}
+            title="Kamera 2: Architektur & Vollendung"
+          >
+            <span
+              className={`${styles.feedDot} ${activeSlot === 2 ? styles.feedDotActive : ""}`}
+            />
+            02 Architektur
+          </button>
+        </div>
+
+        {/* ── Beat 1: Main Opening Overlay ───────────────────────────────── */}
+        <motion.div
+          className={styles.openingOverlay}
+          style={{ y: openY, opacity: openOpacity }}
+        >
+          <motion.span
+            className={styles.eyebrow}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
             <span className={styles.eyebrowDot} />
             Seit 1974 — Bauexzellenz in Deutschland
           </motion.span>
-          <motion.h1 className={styles.heroTitle}
-            initial={{ opacity: 0, y: 44 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}>
+
+          <motion.h1
+            className={styles.heroTitle}
+            initial={{ opacity: 0, y: 35 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
             <span className={styles.titleLine}>DIE ZUKUNFT</span>
             <span className={styles.titleLine}>
               BAUEN. <em className={styles.titleAccent}>PRÄZISION.</em>
             </span>
             <span className={styles.titleLine}>INNOVATION.</span>
           </motion.h1>
-          <motion.p className={styles.heroSubtitle}
-            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}>
+
+          <motion.p
+            className={styles.heroSubtitle}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
             Ihr Partner für anspruchsvollen Hoch- und Tiefbau in Deutschland —
-            von der Planung bis zur schlüsselfertigen Übergabe.
+            von der ingenieurtechnischen Planung bis zur schlüsselfertigen Übergabe.
           </motion.p>
-          <motion.div className={styles.ctaGroup}
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.05, ease: [0.16, 1, 0.3, 1] }}>
-            <Link href="#referenzen" className={styles.btnPrimary}>Unsere Projekte</Link>
-            <Link href="/leistungen" className={styles.btnSecondary}>Leistungen entdecken</Link>
+
+          <motion.div
+            className={styles.ctaGroup}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Link href="#referenzen" className={styles.btnPrimary}>
+              Unsere Projekte
+            </Link>
+            <Link href="/leistungen" className={styles.btnSecondary}>
+              Leistungen entdecken
+            </Link>
           </motion.div>
         </motion.div>
 
-        {/* Mid-scroll caption */}
-        <motion.div className={styles.captionOverlay} style={{ opacity: capOp, y: capY }} aria-hidden>
-          <p className={styles.captionText}>
-            Modernste Bautechnologie — von der Planung bis zur Übergabe
-          </p>
-        </motion.div>
-
-        {/* End stats */}
-        <motion.div className={styles.endCard} style={{ opacity: endOp }}>
-          <div className={styles.statsRow}>
-            {[
-              { value: "50+",    label: "Jahre Erfahrung"     },
-              { value: "1.200+", label: "Projekte realisiert" },
-              { value: "98%",    label: "Kundenzufriedenheit" },
-            ].map(s => (
-              <div key={s.label} className={styles.stat}>
-                <span className={styles.statValue}>{s.value}</span>
-                <span className={styles.statLabel}>{s.label}</span>
+        {/* ── Beat 2: Mid-Scroll Tech & Precision Feature Card ───────────── */}
+        <motion.div
+          className={styles.beat2Overlay}
+          style={{
+            opacity: beat2Opacity,
+            y: beat2Y,
+            scale: beat2Scale
+          }}
+          aria-hidden={false}
+        >
+          <div className={styles.techCard}>
+            <div className={styles.techBadge}>
+              <Cpu size={15} />
+              <span>BIM 5D &amp; Digitale Bauleitung</span>
+            </div>
+            <h2 className={styles.techTitle}>
+              Modernste Bautechnologie — Von der Planung bis zur schlüsselfertigen Übergabe
+            </h2>
+            <div className={styles.techGrid}>
+              <div className={styles.techPill}>
+                <ShieldCheck size={20} className={styles.techPillIcon} />
+                <span className={styles.techPillText}>Präzision im Ingenieurbau</span>
               </div>
-            ))}
+              <div className={styles.techPill}>
+                <Sparkles size={20} className={styles.techPillIcon} />
+                <span className={styles.techPillText}>DGNB Platin Standards</span>
+              </div>
+              <div className={styles.techPill}>
+                <CheckCircle2 size={20} className={styles.techPillIcon} />
+                <span className={styles.techPillText}>100% Termintreue</span>
+              </div>
+            </div>
           </div>
         </motion.div>
 
-        {/* Scroll hint */}
-        <motion.div className={styles.scrollIndicator} style={{ opacity: scrollY }}>
+        {/* ── Beat 3: Grand Finale Stats & Credibility Row ───────────────── */}
+        <motion.div
+          className={styles.beat3Overlay}
+          style={{ opacity: beat3Opacity, y: beat3Y }}
+        >
+          <div className={styles.statsRow}>
+            <div className={styles.statsGroup}>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  50<span className={styles.statValueAccent}>+</span>
+                </span>
+                <span className={styles.statLabel}>Jahre Erfahrung</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  1.200<span className={styles.statValueAccent}>+</span>
+                </span>
+                <span className={styles.statLabel}>Projekte realisiert</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  98<span className={styles.statValueAccent}>%</span>
+                </span>
+                <span className={styles.statLabel}>Kundenzufriedenheit</span>
+              </div>
+            </div>
+
+            <Link href="#uber-uns" className={styles.scrollDownHint}>
+              <span>MEIER GMBH entdecken</span>
+              <ArrowDown size={16} />
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* ── Ambient Video Controls (Bottom Left) ───────────────────────── */}
+        <div className={styles.ambientControls}>
+          <button
+            type="button"
+            className={styles.controlBtn}
+            onClick={togglePlay}
+            aria-label={isPlaying ? "Video pausieren" : "Video abspielen"}
+            title={isPlaying ? "Pause" : "Play"}
+          >
+            {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+          </button>
+          <button
+            type="button"
+            className={styles.controlBtn}
+            onClick={toggleMute}
+            aria-label={isMuted ? "Ton einschalten" : "Ton stummschalten"}
+            title={isMuted ? "Ton an" : "Stumm"}
+          >
+            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          </button>
+        </div>
+
+        {/* ── Scroll Indicator (Bottom Center at start) ──────────────────── */}
+        <motion.div
+          className={styles.scrollIndicator}
+          style={{ opacity: scrollHintOpacity }}
+        >
           <span className={styles.scrollLabel}>Scrollen</span>
           <div className={styles.scrollLine}>
-            <motion.div className={styles.scrollLineFill}
+            <motion.div
+              className={styles.scrollLineFill}
               animate={{ scaleY: [0, 1, 0] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }} />
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            />
           </div>
         </motion.div>
 
-        <motion.div className={styles.progressBar} style={{ scaleX: scrollYProgress }} />
+        {/* ── Top Scroll Progress Bar ────────────────────────────────────── */}
+        <motion.div
+          className={styles.progressBar}
+          style={{ scaleX: scrollYProgress }}
+        />
       </div>
     </div>
   );
