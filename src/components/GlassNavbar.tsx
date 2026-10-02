@@ -81,7 +81,7 @@ export default function GlassNavbar() {
         <Link
           href={isHome ? "#top" : "/"}
           onClick={isHome ? scrollToTop : undefined}
-          aria-label="MEIER GMBH Startseite"
+          aria-label="INZAG Startseite"
           style={{ flexShrink: 0 }}
         >
           <MeierLogo />

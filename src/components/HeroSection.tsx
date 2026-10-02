@@ -381,7 +381,7 @@ export default function HeroSection() {
             </div>
 
             <Link href="#uber-uns" className={styles.scrollDownHint}>
-              <span>MEIER GMBH entdecken</span>
+              <span>INZAG entdecken</span>
               <ArrowDown size={16} />
             </Link>
           </div>
