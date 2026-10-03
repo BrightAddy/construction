@@ -21,7 +21,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   Cpu,
-  ArrowDown,
   Sparkles
 } from "lucide-react";
 import GlassNavbar from "./GlassNavbar";
@@ -379,11 +378,6 @@ export default function HeroSection() {
                 <span className={styles.statLabel}>Kundenzufriedenheit</span>
               </div>
             </div>
-
-            <Link href="#uber-uns" className={styles.scrollDownHint}>
-              <span>INZAG entdecken</span>
-              <ArrowDown size={16} />
-            </Link>
           </div>
         </motion.div>
 

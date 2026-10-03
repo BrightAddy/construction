@@ -316,7 +316,7 @@
 
 .statsRow {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-end;
   gap: 2rem;
   flex-wrap: wrap;
@@ -325,7 +325,7 @@
 
 .statsGroup {
   display: flex;
-  gap: 3.5rem;
+  gap: clamp(2rem, 5vw, 5rem);
   flex-wrap: wrap;
 }
 

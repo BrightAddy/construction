@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search, X, Menu } from "lucide-react";
-import MeierLogo from "./MeierLogo";
 import styles from "./GlassNavbar.module.css";
 
 export default function GlassNavbar() {
@@ -77,16 +76,6 @@ export default function GlassNavbar() {
           isScrolled ? styles.headerContainerScrolled : ""
         } ${isHidden ? styles.headerHidden : ""}`}
       >
-        {/* Brand Logo (Links to Home) */}
-        <Link
-          href={isHome ? "#top" : "/"}
-          onClick={isHome ? scrollToTop : undefined}
-          aria-label="INZAG Startseite"
-          style={{ flexShrink: 0 }}
-        >
-          <MeierLogo />
-        </Link>
-
         {/* Frosted Glass Pill Navigation Bar */}
         <nav className={styles.glassPill} aria-label="Hauptnavigation">
           {/* Search Trigger */}
@@ -186,7 +175,6 @@ export default function GlassNavbar() {
         }`}
       >
         <div className={styles.mobileDrawerHeader}>
-          <MeierLogo />
           <button
             type="button"
             className={styles.mobileCloseButton}

@@ -13,7 +13,7 @@
   padding: 1.4rem 2rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1.5rem;
   transform: translateY(0);
   background: transparent;
@@ -225,6 +225,10 @@
    ========================================= */
 .mobileMenuToggle {
   display: none;
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
   width: 44px;
   height: 44px;
   border-radius: 9999px;
@@ -261,7 +265,7 @@
 .mobileDrawerHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-bottom: 2.5rem;
 }
 
